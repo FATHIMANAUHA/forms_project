@@ -101,7 +101,7 @@
                 include 'config.php'; // Include the database connection
                 
                 // Fetch entries from the database
-                $result = $conn->query("SELECT * FROM entries");
+                $result = $conn->query("SELECT * FROM entries ORDER BY Sl_no ASC");
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>
@@ -110,7 +110,7 @@
                             <td>{$row['Mobile']}</td>
                             <td>{$row['Location']}</td>
                             <td>
-                                <a href='delete.php?id={$row['Id']}' 
+                                <a href='delete.php?sl_no={$row['Sl_no']}' 
                                    onclick=\"return confirm('Are you sure you want to delete this record?');\">
                                    Delete
                                 </a>
