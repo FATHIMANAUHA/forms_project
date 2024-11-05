@@ -1,36 +1,23 @@
 <?php
-// Include the database connection
-include 'config.php';
+include 'config.php'; // Include database connection
 
-// Check if the 'id' is set in the URL (GET request)
-if (isset($_GET['id'])) {
-    // Sanitize the input to ensure it's an integer
-    $id = intval($_GET['id']);
+if (isset($_GET['sl_no'])) {
+    $sl_no = $_GET['sl_no'];
 
-    // Prepare the delete query
-    $sql = "DELETE FROM entries WHERE Id = ?";
+    // Delete query based on SL No
+    $sql = "DELETE FROM entries WHERE Sl_no = ?";
+    
+    // Prepare and execute the query
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $sl_no); // 'i' for integer
+    $stmt->execute();
 
-    // Use prepared statements to prevent SQL injection
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("i", $id); // 'i' indicates that the parameter is an integer
-        
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Redirect with a success message
-            header("Location: index.php?message=Record+deleted+successfully");
-            exit();
-        } else {
-            // Error deleting record
-            echo "Error deleting record: " . $stmt->error;
-        }
-    } else {
-        echo "Error preparing statement: " . $conn->error;
-    }
+    // Redirect back to the main page after deletion
+    header("Location: index.php");
+    exit();
 } else {
-    echo "Invalid request.";
+    // If no SL No is provided, redirect back to the main page
+    header("Location: index.php");
+    exit();
 }
-
-// Close the statement and connection
-$stmt->close();
-$conn->close();
 ?>
